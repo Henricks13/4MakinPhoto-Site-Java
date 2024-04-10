@@ -47,6 +47,12 @@
 			<artifactId>s3</artifactId>
 			<version>2.17.93</version> <!-- Versão atualizada do SDK da AWS -->
 		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.12.83</version> <!-- Versão mais recente disponível -->
+		</dependency>
+
 
 	</dependencies>
 

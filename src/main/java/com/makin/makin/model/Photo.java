@@ -16,11 +16,16 @@ public class Photo {
     private Long id;
 
     private String url;
-    private String description;
 
     @ManyToOne
     private Game game;
 
-    // Outros atributos e métodos, se necessário
-}
+    // Getter e Setter para a propriedade game
+    public Game getGame() {
+        return game;
+    }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
+}

@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/photos")
@@ -27,22 +29,16 @@ public class PhotoController {
     }
 
     @PostMapping
-    public ResponseEntity<Photo> addPhoto(@RequestBody Photo photo) {
-        Photo newPhoto = photoService.addPhoto(photo).orElse(null);
-        if (newPhoto != null) {
-            return new ResponseEntity<>(newPhoto, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<Photo> addPhoto(@RequestParam("gameId") Long gameId, @RequestParam("file") MultipartFile file) {
+        Optional<Photo> savedPhoto = photoService.addPhoto(gameId, file);
+        return savedPhoto.map(photo -> new ResponseEntity<>(photo, HttpStatus.CREATED))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Photo> getPhotoById(@PathVariable Long id) {
-        Photo photo = photoService.getPhotoById(id).orElse(null);
-        if (photo != null) {
-            return new ResponseEntity<>(photo, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<Photo> photo = photoService.getPhotoById(id);
+        return photo.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
