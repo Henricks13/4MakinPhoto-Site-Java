@@ -1,12 +1,9 @@
 package com.makin.makin.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import java.util.List;
 
 import lombok.Data;
 
@@ -19,5 +16,5 @@ public class Game {
 
     private String name;
 
-    // Outros atributos e métodos, se necessário
+    private String bannerUrl;
 }

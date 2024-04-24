@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,10 +34,23 @@ public class GameController {
     }
 
     @PostMapping
-    public ResponseEntity<Game> addGame(@RequestBody Game game) {
-        Game newGame = gameService.addGame(game);
-        return new ResponseEntity<>(newGame, HttpStatus.CREATED);
+    public ResponseEntity<Game> addGame(@RequestParam("banner") MultipartFile banner, @RequestParam("name") String name) {
+        try {
+            // Salva a foto do banner no Amazon S3 e cria um novo jogo
+            Game newGame = gameService.addGameWithBanner(name, banner);
+
+            if (newGame != null) {
+                return new ResponseEntity<>(newGame, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
